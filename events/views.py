@@ -85,7 +85,7 @@ def event_home(request):
     if search_keyword or category_id or datefilter:
         filtered_events = events_query.prefetch_related('participants')
     else:
-        filtered_events = events_query[:6].prefetch_related('participants')
+        filtered_events = events_query[:12].prefetch_related('participants')
 
     categories = Category.objects.all()
     total_events = Event.objects.count()
