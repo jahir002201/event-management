@@ -1,0 +1,46 @@
+{% extends 'events/events.html' %}
+{% block title %}Events{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto p-6 flex-1">
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold">Events</h1>
+    <a href="{% url 'event_create' %}" class="bg-orange-500 hover:bg-orange-700 text-white px-4 py-2 rounded">Add Event</a>
+</div>
+
+<table class="w-full bg-white shadow rounded-lg divide-y divide-gray-200">
+    <thead class="bg-gray-50">
+        <tr>
+            <th class="px-4 py-2 text-left">Name</th>
+            <th class="px-4 py-2 text-left">Category</th>
+            <th class="px-4 py-2 text-left">Participants</th>
+            <th class="px-4 py-2 text-left">Date</th>
+            <th class="px-4 py-2 text-left">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for event in events %}
+        <tr class="hover:bg-gray-50">
+            <td class="px-4 py-2">{{ event.name }}</td>
+            <td class="px-4 py-2">{{ event.category.name }}</td>
+            <td class="px-4 py-2">{{ event.participants.count }}</td>
+            <td class="px-4 py-2">{{ event.date }} {{ event.time }}</td>
+            <td class="px-4 py-2 flex gap-2">
+                <a href="{% url 'event_update' event.id %}" class="px-2 py-1 bg-green-500 text-white rounded">Edit</a>
+                <form action="{% url 'event_delete' event.id %}" method="POST" class="inline">
+                    {% csrf_token %}
+                    <button type="submit" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-orange-900">
+                        Delete
+                    </button>
+                </form>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5" class="text-center text-gray-500 py-4">No events found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}

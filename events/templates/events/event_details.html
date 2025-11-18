@@ -1,0 +1,108 @@
+{% extends 'events/events.html' %}
+{% block title %}Event Details{% endblock %}
+
+{% block content %}
+{% load static %}
+    <section class="relative w-full h-64 bg-cover bg-center" style="background-image: url('{% static "images/bg-img.jpg" %}');">
+        <div class="absolute inset-0 bg-gray-900 opacity-70"></div>
+        <div class="container mx-auto flex items-center justify-center h-full relative z-10">
+            <div class="text-center text-white">
+                <div class="mb-4">
+                    <span class="sub-title uppercase tracking-widest text-sm">Single Event</span>
+                    <h2 class="big-title text-4xl font-extrabold mt-1"><strong class="text-yellow-400">Event Details</strong></h2>
+                </div>
+                <div class="breadcrumb-list text-lg">
+                    <a href="{% url 'event_home' %}" class="hover:text-yellow-500">Home</a> 
+                    <span class="mx-2">/</span>
+                    <a href="{% url 'event_list' %}" class="hover:text-yellow-500">Events</a>
+                    <span class="mx-2">/</span>
+                    <span class="text-white">{{ event.name|default:"Event Title" }}</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="event-details-section" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+                
+                <div class="lg:col-span-12">
+                    <div class="bg-white p-8 rounded-xl shadow-lg mb-10">
+                        <div class="event-title mb-6 border-b pb-4">
+                            <span class="tag-item inline-flex items-center text-yellow-500 text-xl font-semibold py-1 rounded-full mb-3">
+                                <i class="fas fa-bookmark mr-2"></i>
+                            </span>
+                            <span class="text-lg">Featured Event</span>
+                            <h2 class="text-4xl font-extrabold text-gray-900">{{ event.name }}</h2>
+                        </div>
+                        
+                        <div class="mb-8">
+                            <img src="{% static 'images/bg-event.jpg' %}" alt="{{ event.name }}" class="w-full rounded-lg shadow-md h-96 object-cover">
+                        </div>
+                        
+                        <div class="event-info-list grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 border-b pb-6">
+                            
+                            <div class="flex items-start space-x-4">
+                                <span class="icon text-3xl text-yellow-500 mt-1">
+                                    <i class="far fa-calendar"></i>
+                                </span>
+                                <div>
+                                    <small class="event-title text-gray-500 block">Event Date</small>
+                                    <h3 class="event-date text-lg font-bold text-gray-800">{{ event.date|date:"d F Y" }}</h3>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start space-x-4">
+                                <span class="icon text-3xl text-yellow-500 mt-1">
+                                    <i class="far fa-clock"></i>
+                                </span>
+                                <div>
+                                    <small class="event-title text-gray-500 block">Event Time</small>
+                                    <h3 class="event-date text-lg font-bold text-gray-800">{{ event.time|date:"g:i A" }}</h3>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start space-x-4">
+                                <span class="icon text-3xl text-yellow-500 mt-1">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </span>
+                                <div>
+                                    <small class="event-title text-gray-500 block">Event Location</small>
+                                    <h3 class="event-date text-lg font-bold text-gray-800">{{ event.location|default:"Dhaka" }}</h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-10">
+                            <p class="text-gray-700 leading-relaxed mb-4">
+                                {{ event.description|linebreaksbr|default:"This is the primary description of the event." }}
+                            </p>
+                        </div>
+                    </div>
+                    
+                   <div class="event-participants bg-white p-8 rounded-xl shadow-lg">
+                    <div class="section-title text-left mb-6 border-b pb-3">
+                        <h2 class="3xl font-bold text-gray-900">Event <strong>Participants</strong></h2>
+                        <p class="text-gray-500 mt-1">Total Registered: {{ event.participants.count }}</p>
+                    </div>
+                    {% if event.participants.all %}
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        {% for participant in event.participants.all %}
+                        <div class="participant-item flex flex-col items-center bg-gray-50 p-4 rounded-lg shadow-sm hover:shadow-md transition duration-150">
+                            <i class="fas fa-user-circle text-4xl text-yellow-500 mb-2"></i>
+                            <h4 class="font-semibold text-sm text-gray-900 text-center truncate w-full">{{ participant.name }}</h4>
+                            <p class="text-xs text-gray-500 text-center truncate w-full">{{ participant.email }}</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p class="text-gray-500 p-4 border rounded-lg">No participants have registered for this event yet.</p>
+                    {% endif %}
+                   </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+{% endblock content %}

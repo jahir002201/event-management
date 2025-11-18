@@ -1,0 +1,17 @@
+{% extends 'events/events.html' %}
+{% block title %}Categories{% endblock %}
+{% block content %}
+<div class="max-w-7xl mx-auto p-6 flex-1">
+<div class="max-w-lg mx-auto bg-gray-100 p-6 rounded shadow">
+    <div class="flex justify-between mb-4">
+    <a href="{% url 'category_list' %}" class="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-700">Category List Show</a>
+    </div>
+    <h2 class="text-xl font-bold mb-4">Category Form</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="mt-4 px-4 py-2 bg-teal-500 text-white rounded">Submit</button>
+    </form>
+</div>
+</div>
+{% endblock %}

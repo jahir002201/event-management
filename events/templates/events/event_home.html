@@ -1,0 +1,166 @@
+{% extends "events/events.html" %}
+{% load static %}
+
+{% block content %}
+    <section class="relative w-full h-80 bg-cover bg-center" style="background-image: url('{% static "images/bg-img.jpg" %}');">
+        <div class="absolute inset-0 bg-gray-900 opacity-20"></div>
+        <div class="container mx-auto flex items-center justify-center h-full relative z-10">
+            <div class="text-center text-white">
+                <h1 class="text-5xl font-extrabold text-yellow-700 mb-4"> Event Management</h1>
+                <p class="text-xl mb-8"><a href="{% url 'event_home' %}" class="hover:text-cyan-300" >Home</a> | event grid</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="relative py-12 bg-cover bg-center" style="background-image: url('{% static "images/bg-img2.png" %}');">
+        <div class="absolute inset-0 bg-gray-900 opacity-20"></div> <div class="container mx-auto px-4 relative z-10">
+
+            <div class="max-w-4xl mx-auto text-center mb-8">
+                <h2 class="text-3xl font-bold text-white mb-2">Find Best Event</h2>
+            </div>
+
+            <form method="GET" action="{% url 'event_home' %}" class="max-w-5xl mx-auto p-6 md:p-8 z-20">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+                    
+                    <div class="md:col-span-2">
+                        <label for="search_keyword" class="block text-sm font-extrabold text-gray-700 mb-1">Event Keyword</label>
+                        <input type="search" name="search" id="search_keyword" placeholder="Event name, location" value="{{ search_keyword|default_if_none:'' }}"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-yellow-500 focus:border-yellow-500 shadow-sm">
+                    </div>
+
+                    <div>
+                        <label for="category_filter" class="block text-sm font-extrabold text-gray-700 mb-1">Event Category</label>
+                        <select name="category" id="category_filter" 
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white focus:ring-yellow-500 focus:border-yellow-500 shadow-sm">
+                            <option value="">All Categories</option>
+                            {% for cat in categories %}
+                                <option value="{{ cat.id }}" {% if category_id|slugify == cat.id|slugify %}selected{% endif %}>{{ cat.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <button type="submit" class="w-full bg-teal-500 hover:bg-teal-700 text-white font-bold py-3 rounded-lg transition duration-300 shadow-md">
+                        Search Event
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-4 gap-10">
+            
+            <div class="lg:col-span-1 space-y-8">
+                
+                <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-cyan-600">
+                    <h2 class="font-bold text-gray-800 mb-4">Google Map Search</h2>
+                    <div class="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-500 rounded-lg border border-dashed">
+                        <iframe
+                            class="w-full h-full"
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3651.780202529058!2d90.3563314154281!3d23.685011284663093!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c76b42a3bfbf%3A0x92c38a3d32b6d15b!2sBangladesh!5e0!3m2!1sen!2sbd!4v1700092368100!5m2!1sen!2sbd"
+                            allowfullscreen=""
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+                </div>
+
+                {% if featured_event %}
+                <div class="bg-gray-900 rounded-xl shadow-lg overflow-hidden relative text-center" style="background-image: url({% static 'images/bg-event.jpg' %}); background-size: cover;">
+                    <div class="absolute inset-0 bg-black opacity-70"></div>
+                    <div class="relative p-8">
+                       <p class="sub-title mb-3 text-sm text-gray-300">{{ featured_event.date|date:"j F Y"|upper }}</p>
+                        <h2 class="title-large text-gray-300 mb-6 text-2xl font-extrabold leading-tight">
+                            {{ featured_event.location|upper }}
+                            <strong class="text-yellow-500">{{ featured_event.name }}</strong>
+                        </h2>
+                        <p class="text-gray-400 mb-4">{{ featured_event.description|truncatechars:100 }}</p>
+                        <a href="{% url 'event_details' id=featured_event.id %}" 
+                        class="inline-block bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-3 px-6 rounded-lg transition duration-300">
+                            View Details<i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="lg:col-span-3">
+                 <div class="text-left mb-8 pb-4 border-b border-gray-200">
+                    {% if search_keyword or category_id or start_date or end_date %}
+                        <p class="text-xl font-semibold text-gray-700">{{ total_results }} Search results from {{ total_upcoming }} upcoming events</p>
+                    {% else %}
+                        <p class="text-xl font-semibold text-gray-700">{{ total_upcoming }} Upcoming Events</p>
+                    {% endif %}
+                </div>
+
+                <form method="GET" action="{% url 'event_home' %}" class="mb-8 p-6 rounded-xl shadow-md">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">Filter by Date Range</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+                    <div class="md:col-span-1">
+                      <label for="start_date" class="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+                      <input type="text" name="start_date" id="start_date" 
+                        value="{% if start_date %}{{ start_date|date:'d/m/Y' }}{% endif %}" 
+                        placeholder="DD/MM/YYYY"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-yellow-500 focus:border-yellow-500 shadow-md">
+                    </div>
+
+                    <div class="md:col-span-1">
+                        <label for="end_date" class="block text-sm font-medium text-gray-700 mb-1">End Date</label>
+                        <input type="text" name="end_date" id="end_date" 
+                            value="{% if end_date %}{{ end_date|date:'d/m/Y' }}{% endif %}" 
+                            placeholder="DD/MM/YYYY"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-yellow-500 focus:border-yellow-500 shadow-md">
+                    </div>
+                    <div class="md:col-span-1">
+                        <button type="submit" class="w-full text-gray-200 bg-orange-500 font-bold py-3 rounded-lg shadow-md">
+                        Filter
+                        </button>
+                    </div>
+                    </div>
+                </form>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    {% for event in filtered_events %}
+                    <div class="bg-white border border-gray-200 rounded-xl shadow-lg hover:shadow-xl transition duration-300 overflow-hidden flex flex-col">
+                        
+                        <div class="relative">
+                            <img src="{% static 'images/bg-event.jpg' %}" alt="{{ event.name }}" class="w-full h-48 object-cover">
+                            <div class="absolute top-0 left-0 bg-yellow-500 text-gray-900 font-bold text-center p-3 rounded-bl-lg">
+                                <span class="block text-xl leading-none">{{ event.date|date:"d" }}</span>
+                                <small class="block text-sm leading-none">{{ event.date|date:"M"|upper }}</small>
+                            </div>
+                        </div>
+
+                        <div class="p-5 flex-grow">
+                            <h3 class="text-xl font-bold text-gray-900 mb-2 truncate hover:text-yellow-600">
+                                <a href="{% url 'event_details' id=event.id %}">{{ event.name }}</a>
+                            </h3>
+                            <p class="text-base font-semibold text-blue-600 mb-3">{{ event.category.name }}</p> 
+                            
+                            <div class="space-y-2 text-sm text-gray-600 border-t pt-3">
+                               <p><i class="fas fa-clock mr-2 text-yellow-500"></i>Start {{ event.time|date:"H:iA" }}</p>
+                                <p><i class="fas fa-map-marker-alt mr-2 text-yellow-500"></i>{{ event.location }}</p>
+                                <p class="font-bold text-gray-800"><i class="fas fa-users mr-2 text-yellow-500"></i>Participants: {{ event.participants.count }}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="p-5 border-t border-gray-100 flex justify-between items-center">
+                            <span class="text-xs text-gray-500">{{ event.date|date:"d F" }}</span>
+                            <a href="{% url 'event_details' id=event.id %}" class="text-blue-600 hover:text-blue-800 font-semibold text-sm transition duration-300">
+                                tickets & details <i class="fas fa-arrow-right ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="col-span-2 bg-white p-10 rounded-xl shadow-lg text-center">
+                        <i class="fas fa-exclamation-circle text-6xl text-gray-400 mb-4"></i>
+                        <p class="text-xl text-gray-700 font-semibold">No Featured Upcoming Events Found</p>
+                        <p class="text-gray-500 mt-2">Check the full list or try the search above.</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock content %}

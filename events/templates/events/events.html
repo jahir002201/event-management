@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Event Management{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+
+    {% comment %} Navbar {% endcomment %}
+
+    <nav class="bg-teal-500 shadow-sm p-5 md:px-20 text-black">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+            <div class="font-bold text-xl mb-3 md:mb-0 flex items-center justify-between">
+                <p class="font-extrabold text-yellow-500">Event Management</p>
+                <button id="navBtn" class="md:hidden text-white text-2xl mb-2">
+                    &#9776;
+                </button>
+            </div>
+            <div id="menu" class="hidden flex-col space-y-2 md:space-y-0 md:flex md:flex-row md:space-x-6">
+                <a href="{% url 'event_home' %}" class="block md:inline text-lg hover:text-gray-200">Home</a>
+                <a href="{% url 'dashboard' %}" class="block md:inline text-lg hover:text-gray-200">Dashboard</a>
+                <a href="{% url 'event_list' %}" class="block md:inline text-lg hover:text-gray-200">Events</a>
+                <a href="{% url 'participant_list' %}" class="block md:inline text-lg hover:text-gray-200">Participants</a>
+                <a href="{% url 'category_list' %}" class="block md:inline text-lg hover:text-gray-200">Categories</a>
+            </div>
+        </div>
+    </nav>
+
+<script>
+    const btn = document.getElementById("navBtn");
+    const menu = document.getElementById("menu");
+
+    btn.onclick = () => menu.classList.toggle("hidden");
+</script>
+
+    {% comment %} Main Content {% endcomment %}
+    <main class="flex-1">
+        {% comment %} Messages {% endcomment %}
+        {% if messages %}
+        <div class="max-w-4xl mx-auto my-4">
+            {% for message in messages %}
+            <div class="{% if message.tags == 'success' %}bg-green-500{% elif message.tags == 'error' %}bg-red-500{% else %}bg-blue-500{% endif %} px-4 py-2 rounded text-white mb-2">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% block content %}{% endblock %}
+    </main>
+
+    {% comment %} Footer {% endcomment %}
+    <hr>
+    <footer class="shadow-inner">
+        <div class="text-black-500 text-sm text-center m-5">
+            <p>&copy; 2025 Event Management System. All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
