@@ -1,10 +1,12 @@
-{% extends 'events/events.html' %}
+{% extends 'base.html' %}
 {% block title %}Categories{% endblock %}
 {% block content %}
 <div class="max-w-7xl mx-auto p-6 flex-1">
     <div class="flex justify-between mb-6">
     <h1 class="text-3xl font-bold">Categories</h1>
+    {% if user.is_superuser or user.groups.all.0.name == "Admin" or user.groups.all.0.name == "Organizer" %}
     <a href="{% url 'category_create' %}" class="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-700">Add Category</a>
+    {% endif %}
     </div>
 
     <div class="bg-white rounded-lg shadow overflow-x-auto">
@@ -24,14 +26,19 @@
                 <td class="px-6 py-4">{{ category.description|default:"-" }}</td>
                 <td class="px-6 py-4">{{ category.events.count }}</td>
                 <td class="px-6 py-4 flex space-x-2">
+                    {% if user.is_superuser or user.groups.all.0.name == "Admin" or user.groups.all.0.name == "Organizer" %}
                     <a href="{% url 'category_update' category.id %}" class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600">Edit</a>
-                    <form action="{% url 'category_delete' category.id %}" method="POST" class="inline">
+                    <form action="{% url 'category_delete' category.id %}" method="POST" class="inline"
+                          onsubmit="return confirm('Are you sure you want to delete this category?');">
                         {% csrf_token %}
                         <button type="submit" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-orange-900">
                             Delete
                         </button>
                     </form>
-
+                    {% else %}
+                    <p class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600">Edit</p>
+                    <p class="bg-red-500 text-white px-2 py-1 rounded hover:bg-orange-900">Delete</p>
+                    {% endif %}
                 </td>
             </tr>
             {% empty %}

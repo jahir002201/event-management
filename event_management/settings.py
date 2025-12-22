@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
 import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -21,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-75ydb5hpekt5uqx1c%epl%e#^rk47p^3zeyo(qcv9vbt&%mh%+'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -40,6 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'events',
+    'users',
+    'core',
     'debug_toolbar',
 ]
 
@@ -94,10 +97,11 @@ WSGI_APPLICATION = 'event_management.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default='postgresql://event_management_db_0z5g_user:dfAxiPEOaSgWHt13cJAxdrr5V2km1pPb@dpg-d4ed5emr433s738l5820-a.oregon-postgres.render.com/event_management_db_0z5g',
+        default=config('DATABASE_URL'),
         conn_max_age=600
     )
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -138,7 +142,21 @@ STATICFILES_DIRS = [
     BASE_DIR/'static',
 ]
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
+EMAIL_PORT = config('EMAIL_PORT')
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+
+LOGIN_URL = 'sign_in'
+
+FRONTEND_URL = config('FRONTEND_URL')

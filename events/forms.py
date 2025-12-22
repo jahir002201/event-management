@@ -1,5 +1,5 @@
 from django import forms
-from .models import Event, Participant, Category
+from events.models import Event, Category
 
 
 class StyledFormMixin:
@@ -46,24 +46,10 @@ class CategoryForm(StyledFormMixin, forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.apply_styled_widgets()
 
-
-class ParticipantForm(StyledFormMixin, forms.ModelForm):
-    class Meta:
-        model = Participant
-        fields = ['name', 'email', 'events']
-        widgets = {
-            'events': forms.CheckboxSelectMultiple,
-        }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.apply_styled_widgets()
-
-
 class EventForm(StyledFormMixin, forms.ModelForm):
     class Meta:
         model = Event
-        fields = ['name', 'description', 'date', 'time', 'location', 'category']
+        fields = ['name', 'description', 'date', 'time', 'location', 'category', 'image', 'participants']
         widgets = {
             'category': forms.Select,
             'date': forms.SelectDateWidget,

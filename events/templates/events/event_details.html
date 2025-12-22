@@ -1,4 +1,4 @@
-{% extends 'events/events.html' %}
+{% extends 'base.html' %}
 {% block title %}Event Details{% endblock %}
 
 {% block content %}
@@ -12,7 +12,7 @@
                     <h2 class="big-title text-4xl font-extrabold mt-1"><strong class="text-yellow-400">Event Details</strong></h2>
                 </div>
                 <div class="breadcrumb-list text-lg">
-                    <a href="{% url 'event_home' %}" class="hover:text-yellow-500">Home</a> 
+                    <a href="{% url 'home' %}" class="hover:text-yellow-500">Home</a> 
                     <span class="mx-2">/</span>
                     <a href="{% url 'event_list' %}" class="hover:text-yellow-500">Events</a>
                     <span class="mx-2">/</span>
@@ -36,8 +36,8 @@
                             <h2 class="text-4xl font-extrabold text-gray-900">{{ event.name }}</h2>
                         </div>
                         
-                        <div class="mb-8">
-                            <img src="{% static 'images/bg-event.jpg' %}" alt="{{ event.name }}" class="w-full rounded-lg shadow-md h-96 object-cover">
+                        <div class="mb-8 border-b pb-6">
+                            <img src="{{ event.image.url }}" alt="{{ event.name }}" class="w-full rounded-lg shadow-md object-cover">
                         </div>
                         
                         <div class="event-info-list grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 border-b pb-6">

@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/output.css' %}">
+    <link rel="icon" type="image/svg+xml" href="{% static 'images/favicon.svg' %}">
     <style>
         body { font-family: 'Inter', sans-serif; }
     </style>
@@ -15,24 +16,11 @@
 <body class="bg-gray-50 min-h-screen flex flex-col">
 
     {% comment %} Navbar {% endcomment %}
-
-    <nav class="bg-teal-500 shadow-sm p-5 md:px-20 text-black">
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between">
-            <div class="font-bold text-xl mb-3 md:mb-0 flex items-center justify-between">
-                <p class="font-extrabold text-yellow-500">Event Management</p>
-                <button id="navBtn" class="md:hidden text-white text-2xl mb-2">
-                    &#9776;
-                </button>
-            </div>
-            <div id="menu" class="hidden flex-col space-y-2 md:space-y-0 md:flex md:flex-row md:space-x-6">
-                <a href="{% url 'event_home' %}" class="block md:inline text-lg hover:text-gray-200">Home</a>
-                <a href="{% url 'dashboard' %}" class="block md:inline text-lg hover:text-gray-200">Dashboard</a>
-                <a href="{% url 'event_list' %}" class="block md:inline text-lg hover:text-gray-200">Events</a>
-                <a href="{% url 'participant_list' %}" class="block md:inline text-lg hover:text-gray-200">Participants</a>
-                <a href="{% url 'category_list' %}" class="block md:inline text-lg hover:text-gray-200">Categories</a>
-            </div>
-        </div>
-    </nav>
+    {% if user.is_authenticated %}
+    {% include 'logged_nav.html' %}
+    {% else %}
+    {% include 'non_logged_nav.html' %}
+    {% endif %}
 
 <script>
     const btn = document.getElementById("navBtn");

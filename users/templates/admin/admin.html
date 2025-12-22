@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="max-w-screen mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+    <h1 class="text-center text-2xl sm:text-3xl font-bold mb-8">
+        Admin Dashboard
+    </h1>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+        <div class="bg-blue-100 p-5 rounded-lg shadow text-center">
+            <h3 class="text-base font-semibold">Total Users</h3>
+            <p class="text-3xl font-bold mt-2">{{ total_users }}</p>
+        </div>
+        <div class="bg-green-100 p-5 rounded-lg shadow text-center">
+            <h3 class="text-base font-semibold">Total Events</h3>
+            <p class="text-3xl font-bold mt-2">{{ total_events }}</p>
+        </div>
+        <div class="bg-yellow-100 p-5 rounded-lg shadow text-center">
+            <h3 class="text-base font-semibold">Categories</h3>
+            <p class="text-3xl font-bold mt-2">{{ total_categories }}</p>
+        </div>
+        <div class="bg-purple-100 p-5 rounded-lg shadow text-center">
+            <h3 class="text-base font-semibold">RSVPs</h3>
+            <p class="text-3xl font-bold mt-2">{{ total_rsvps }}</p>
+        </div>
+    </div>
+
+    <div class="flex flex-col sm:flex-row gap-4 justify-center sm:justify-start mb-10">
+        <a href="{% url 'create_group' %}"
+           class="text-center bg-green-500 text-white px-5 py-2 rounded hover:bg-green-600 transition">
+            Create Group
+        </a>
+        <a href="{% url 'group_list' %}"
+           class="text-center bg-gray-500 text-white px-5 py-2 rounded hover:bg-gray-600 transition">
+            View Groups
+        </a>
+        <a href="{% url 'participant_list' %}"
+           class="text-center bg-blue-500 text-white px-5 py-2 rounded hover:bg-blue-600 transition">
+            View Participants
+        </a>
+    </div>
+
+    <div class="bg-white p-4 sm:p-6 rounded-lg shadow">
+        <h2 class="text-lg sm:text-xl font-bold mb-4">
+            User Management
+        </h2>
+        <div class="overflow-x-auto">
+            <table class="min-w-full border text-sm">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="p-2 border whitespace-nowrap">Username</th>
+                        <th class="p-2 border whitespace-nowrap">Email</th>
+                        <th class="p-2 border whitespace-nowrap">Current Role</th>
+                        <th class="p-2 border whitespace-nowrap">Assign Role</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr class="text-center hover:bg-gray-50">
+                        <td class="p-2 border">{{ user.username }}</td>
+                        <td class="p-2 border break-all">{{ user.email }}</td>
+                        <td class="p-2 border font-semibold">
+                            {{ user.role }}
+                        </td>
+                        <td class="p-2 border">
+                            <form method="POST"
+                                  action="{% url 'assign_role' user.id %}"
+                                  class="flex flex-col sm:flex-row items-center justify-center gap-2">
+                                {% csrf_token %}
+                                <select name="role_id"
+                                        class="border rounded px-2 py-1 w-full sm:w-auto">
+                                    {% for group in groups %}
+                                        <option value="{{ group.id }}"
+                                            {% if user.role == group.name %}selected{% endif %}>
+                                            {{ group.name }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                                <button type="submit"
+                                        class="bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 transition w-full sm:w-auto">
+                                    Assign
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="p-6 text-center text-gray-500">
+                            No users found.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock content %}

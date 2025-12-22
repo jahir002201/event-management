@@ -1,11 +1,10 @@
-{% extends 'events/events.html' %}
+{% extends 'base.html' %}
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
 <div class="max-w-7xl mx-auto p-6 flex-1">
     <h1 class="text-2xl font-bold mb-6">Organizer Dashboard</h1>
 
-    {% comment %} Stats Grid {% endcomment %}
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         <a href="?filter=all" class="bg-white p-6 rounded-lg shadow text-center">
             <h3 class="text-gray-500">Total Events</h3>
@@ -25,7 +24,6 @@
         </div>
     </div>
 
-    {% comment %} Today's Events {% endcomment %}
     <h2 class="text-xl font-bold mb-4">{{ list_title }}</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {% if filtered_events %}
