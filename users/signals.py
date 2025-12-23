@@ -9,6 +9,7 @@ from django.conf import settings
 @receiver(post_save, sender=User)
 def send_acivation_email(sender, instance, created, **kwargs):
     if created:
+        print("USER SIGNAL FIRED")
         token = default_token_generator.make_token(instance)
         activation_url = f"{settings.FRONTEND_URL}/users/activate/{instance.id}/{token}/"
         subject = "Activate your account"
