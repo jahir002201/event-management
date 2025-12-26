@@ -1,12 +1,8 @@
 from django.conf import settings
 from django.core.mail import send_mail
 from django.contrib.auth.tokens import default_token_generator
-from django.dispatch import Signal, receiver
 
-user_registered = Signal()
-
-@receiver(user_registered)
-def send_activation_email(sender, user, **kwargs):
+def send_activation_email(sender, user):
     if not user.is_active:
         token = default_token_generator.make_token(user)
         activation_url = f"{settings.FRONTEND_URL}/users/activate/{user.id}/{token}/"
