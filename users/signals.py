@@ -1,8 +1,10 @@
+# users/signals.py (or keep it in views.py if simple)
+import threading
 from django.conf import settings
 from django.core.mail import send_mail
 from django.contrib.auth.tokens import default_token_generator
 
-def send_activation_email(sender, user):
+def send_activation_email_async(user):
     if not user.is_active:
         token = default_token_generator.make_token(user)
         activation_url = f"{settings.FRONTEND_URL}/users/activate/{user.id}/{token}/"
@@ -11,6 +13,6 @@ def send_activation_email(sender, user):
 
         try:
             send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email], fail_silently=False)
-            print(f"Activation email sent to {user.email}")
+            print(f"[INFO] Activation email sent to {user.email}")
         except Exception as e:
-            print(f"Failed to send activation email to {user.email}: {e}")
+            print(f"[ERROR] Failed to send activation email to {user.email}: {e}")

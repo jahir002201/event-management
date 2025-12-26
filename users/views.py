@@ -4,12 +4,13 @@ from users.forms import CustomRegistrationForm, LoginForm
 from django.contrib import messages
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.tokens import default_token_generator
-from users.signals import send_activation_email
 from events.models import Event, Category
 from django.db.models import Count
 from django.utils.timezone import now
 from users.forms import CreateGroupForm
 from django.contrib.auth.decorators import login_required, user_passes_test
+import threading
+from users.signals import send_activation_email_async
 
 
 def is_admin(user):
@@ -33,7 +34,7 @@ def sign_up(request):
             user.save()
             group = Group.objects.get(name='Participant')
             user.groups.add(group)
-            send_activation_email(sender=User, user=user)
+            threading.Thread(target=send_activation_email_async, args=(user,)).start()
             messages.success(request, "Registration successful. Please check your email to activate your account.")
             return redirect('sign_in')
 
