@@ -5,6 +5,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
 from django.conf import settings
 
+print("USER SIGNAL FIRED signals")
 @receiver(post_save, sender=User)
 def send_activation_email(sender, instance, created, **kwargs):
     if not created:
