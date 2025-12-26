@@ -1,9 +1,9 @@
 from django.apps import AppConfig
 
-print("USER SIGNAL FIRED app")
 class UsersConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'users'
 
     def ready(self):
+        print("USER SIGNAL FIRED app")
         import users.signals
