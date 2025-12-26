@@ -5,5 +5,4 @@ class UsersConfig(AppConfig):
     name = 'users'
 
     def ready(self):
-        print("USER SIGNAL FIRED app")
         import users.signals

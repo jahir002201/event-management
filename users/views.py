@@ -4,6 +4,7 @@ from users.forms import CustomRegistrationForm, LoginForm
 from django.contrib import messages
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.tokens import default_token_generator
+from users.signals import user_registered
 from events.models import Event, Category
 from django.db.models import Count
 from django.utils.timezone import now
@@ -32,6 +33,7 @@ def sign_up(request):
             user.save()
             group = Group.objects.get(name='Participant')
             user.groups.add(group)
+            user_registered.send(sender=User, user=user)
             messages.success(request, "Registration successful. Please check your email to activate your account.")
             return redirect('sign_in')
 
