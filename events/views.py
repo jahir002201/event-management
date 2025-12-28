@@ -30,7 +30,7 @@ def dashboard(request):
         return redirect('participant_dashboard')
 @login_required
 def event_list(request):
-    events = Event.objects.filter(date__gte=now().date()).select_related('category').order_by('date')
+    events = Event.objects.select_related('category').order_by('date')
     context = {'events': events}
     return render(request, 'events/event_list.html', context)
 

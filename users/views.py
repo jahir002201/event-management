@@ -9,8 +9,6 @@ from django.db.models import Count
 from django.utils.timezone import now
 from users.forms import CreateGroupForm
 from django.contrib.auth.decorators import login_required, user_passes_test
-import threading
-from users.signals import send_activation_email_async
 
 
 def is_admin(user):
@@ -34,7 +32,6 @@ def sign_up(request):
             user.save()
             group = Group.objects.get(name='Participant')
             user.groups.add(group)
-            threading.Thread(target=send_activation_email_async, args=(user,)).start()
             messages.success(request, "Registration successful. Please check your email to activate your account.")
             return redirect('sign_in')
 
