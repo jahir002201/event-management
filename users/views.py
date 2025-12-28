@@ -192,7 +192,7 @@ def group_delete(request, group_id):
 
 @user_passes_test(is_admin, login_url='no_permission')
 def participant_list(request):
-    participants = User.objects.filter(groups__name='Participant')
+    participants = User.objects.all()
     return render(request, 'admin/participant_list.html', {
         'participants': participants
     })
