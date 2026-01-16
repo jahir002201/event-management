@@ -1,19 +1,35 @@
 from django.urls import path
-from events.views import dashboard, event_list, event_details, event_create, event_update, event_delete, category_list, category_create, category_update, category_delete, rsvp_event
+from events.views import (
+    DashboardRedirectView,
+    EventListView,
+    EventDetailView,
+    EventCreateView,
+    EventUpdateView,
+    EventDeleteView,
+    CategoryListView,
+    CategoryCreateView,
+    CategoryUpdateView,
+    CategoryDeleteView,
+    RSVPEventView,
+)
 
 urlpatterns = [
     # dashboard
-    path('dashboard/', dashboard, name='dashboard'),
+    path('dashboard/', DashboardRedirectView.as_view(), name='dashboard'),
+
     # events
-    path('event_list/', event_list, name='event_list'),
-    path('event_create/', event_create, name='event_create'),
-    path('event_update/<int:id>/', event_update, name='event_update'),
-    path('event_delete/<int:id>/', event_delete, name='event_delete'),
-    path('event_details/<int:id>/', event_details, name='event_details'),
-    # category
-    path('category_list/', category_list, name='category_list'),
-    path('category_create/', category_create, name='category_create'),
-    path('category_update/<int:id>/', category_update, name='category_update'),
-    path('category_delete/<int:id>/', category_delete, name='category_delete'),
-    path('rsvp_event/<int:event_id>/', rsvp_event, name='rsvp_event'),
+    path('event_list/', EventListView.as_view(), name='event_list'),
+    path('event_create/', EventCreateView.as_view(), name='event_create'),
+    path('event_update/<int:id>/', EventUpdateView.as_view(), name='event_update'),
+    path('event_delete/<int:id>/', EventDeleteView.as_view(), name='event_delete'),
+    path('event_details/<int:id>/', EventDetailView.as_view(), name='event_details'),
+
+    # categories
+    path('category_list/', CategoryListView.as_view(), name='category_list'),
+    path('category_create/', CategoryCreateView.as_view(), name='category_create'),
+    path('category_update/<int:id>/', CategoryUpdateView.as_view(), name='category_update'),
+    path('category_delete/<int:id>/', CategoryDeleteView.as_view(), name='category_delete'),
+
+    # RSVP
+    path('rsvp_event/<int:event_id>/', RSVPEventView.as_view(), name='rsvp_event'),
 ]

@@ -11,6 +11,7 @@
             <a href="{% url 'event_list' %}" class="block md:inline text-lg hover:text-gray-200">Events</a>
             <a href="{% url 'category_list' %}" class="block md:inline text-lg hover:text-gray-200">Categories</a>
             <a href="{% url 'dashboard' %}" class="block md:inline text-lg hover:text-gray-200">Dashboard</a>
+            <a href="{% url 'profile' %}" class="block md:inline text-lg hover:text-gray-200">Profile</a>
             <form action="{% url 'sign_out' %}" method="POST">
                 {% csrf_token %}
                 <button type="submit" class="block md:inline text-lg hover:text-gray-200">Logout</button>
